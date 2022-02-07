@@ -10,17 +10,12 @@ import org.junit.Test;
 
 public class Reservation {
     ArrayList<Hotel> hotelList = new ArrayList<>();
-//    public void welcomeMessage() {
-//        System.out.println("Welcome to the Hotel Reservation Program");
-//    }
 
     public void addHotelDetails() {
         hotelList.add(new Hotel("Lakewood", 110, 80,90,80));
         hotelList.add(new Hotel("Bridgewood", 160, 110,60,50));
         hotelList.add(new Hotel("Ridgewood", 220, 100,150,40));
     }
-
-
 
     private static long countWeekDaysMath(LocalDate start, LocalDate end) {
         long count = 0;

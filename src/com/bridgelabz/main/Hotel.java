@@ -14,7 +14,6 @@ public class Hotel {
     //Parameterized Constructor
     public Hotel(String hotelName, int regularRate, int weekDayRateRegularCustomer, int weekDayRateRewardCustomer,int weekEndRateRegularCustomer,int weekEndRateRewardCustomer) {
         this.hotelName = hotelName;
-//        this.regularRate = regularRate;
         int weekDayRateRegularCustomer1 = this.weekDayRateRegularCustomer;
         int weekDayRateRewardCustomer1 = this.weekDayRateRewardCustomer;
         int weekEndRateRegularCustomer1 = this.weekEndRateRegularCustomer;
