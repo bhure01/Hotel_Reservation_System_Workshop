@@ -11,18 +11,18 @@ import java.util.concurrent.TimeUnit;
 
 public class Reservation {
     ArrayList<Hotel> hotelList = new ArrayList<>();
-    public void welcomeMessage() {
-        System.out.println("Welcome to the Hotel Reservation Program");
-    }
+//    public void welcomeMessage() {
+//        System.out.println("Welcome to the Hotel Reservation Program");
+//    }
 
     public void addHotelDetails() {
-        hotelList.add(new Hotel("Lakewood", 110));
-        hotelList.add(new Hotel("Bridgewood", 150));
-        hotelList.add(new Hotel("Ridgewood", 220));
+        hotelList.add(new Hotel("Lakewood", 110, 80,90,80));
+        hotelList.add(new Hotel("Bridgewood", 160, 110,60,50));
+        hotelList.add(new Hotel("Ridgewood", 220, 100,150,40));
     }
 
 
-    // Calculate rates based on period of stay at hotel
+    // Calculating rates based on period of stay at hotel
     public String calculateCheapestHotelAndRate(String dateOfArrival, String dateOfDeparture) throws Exception {
 
         Date dateofArrival = convertStringToDate(dateOfArrival);
@@ -35,12 +35,12 @@ public class Reservation {
         addHotelDetails();
 
         for (int hotel = 0; hotel < hotelList.size(); hotel++) {
-            int totalRate = hotelList.get(hotel).getRegularRate() * (totalDays+1);
-            hotelList.get(hotel).setRegularRate(totalRate);
+            int totalRate = hotelList.get(hotel).getWeekDayRateRegularCustomer() * (totalDays+1);
+            hotelList.get(hotel).setWeekDayRateRegularCustomer(totalRate);
         }
 
-        int regularHotelRate = hotelList.stream().min(Comparator.comparing(Hotel::getRegularRate)).get().getRegularRate();
-        String hotelName = hotelList.stream().min(Comparator.comparing(Hotel::getRegularRate)).get().getHotelName();
+        int regularHotelRate = hotelList.stream().min(Comparator.comparing(Hotel::getWeekDayRateRegularCustomer)).get().getWeekDayRateRewardCustomer();
+        String hotelName = hotelList.stream().min(Comparator.comparing(Hotel::getWeekEndRateRegularCustomer)).get().getHotelName();
 
         System.out.println("The Cheapest Hotel is "+hotelName+" with cost for respective date as "+regularHotelRate+"$");
         return hotelName;
