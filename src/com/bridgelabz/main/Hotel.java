@@ -2,27 +2,29 @@ package com.bridgelabz.main;
 
 public class Hotel {
 
+
     // variables
     public String hotelName;
-    public int regularRate;
+//    public int regularRate;
     public int weekDayRateRegularCustomer;
     public int weekDayRateRewardCustomer;
     public int weekEndRateRegularCustomer;
     public int weekEndRateRewardCustomer;
 
     //Parameterized Constructor
-    public Hotel(String hotelName, int regularRate,int weekDayRateRegularCustomer,int weekDayRateRewardCustomer,int weekEndRateRegularCustomer,int weekEndRateRewardCustomer) {
+    public Hotel(String hotelName, int regularRate, int weekDayRateRegularCustomer, int weekDayRateRewardCustomer,int weekEndRateRegularCustomer,int weekEndRateRewardCustomer) {
         this.hotelName = hotelName;
-        this.regularRate = regularRate;
+//        this.regularRate = regularRate;
         int weekDayRateRegularCustomer1 = this.weekDayRateRegularCustomer;
         int weekDayRateRewardCustomer1 = this.weekDayRateRewardCustomer;
         int weekEndRateRegularCustomer1 = this.weekEndRateRegularCustomer;
         int weekEndRateRewardCustomer1 = this.weekEndRateRewardCustomer;
-
-
     }
 
-    public Hotel(String lakewood, int regularRate) {
+    public Hotel(String lakewood, int weekDayRateRegularCustomer, int weekDayRateRewardCustomer, int weekEndRateRegularCustomer, int weekEndRateRewardCustomer) {
+    }
+
+    public Hotel(String bridgewood, int i, int i1) {
     }
 
     // Getter And Setter Methods
@@ -32,14 +34,6 @@ public class Hotel {
 
     public void setHotelName(String hotelName) {
         this.hotelName = hotelName;
-    }
-
-    public int getRegularRate() {
-        return regularRate;
-    }
-
-    public void setRegularRate(int regularRate) {
-        this.regularRate = regularRate;
     }
 
     public int getWeekDayRateRegularCustomer() {
