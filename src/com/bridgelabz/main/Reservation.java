@@ -1,13 +1,12 @@
 package com.bridgelabz.main;
 
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
+import org.junit.Assert;
+import org.junit.Test;
 
 public class Reservation {
     ArrayList<Hotel> hotelList = new ArrayList<>();
@@ -22,41 +21,56 @@ public class Reservation {
     }
 
 
-    // Calculating rates based on period of stay at hotel
-    public String calculateCheapestHotelAndRate(String dateOfArrival, String dateOfDeparture) throws Exception {
 
-        Date dateofArrival = convertStringToDate(dateOfArrival);
-        Date dateofDeparture = convertStringToDate(dateOfDeparture);
-        long totalPeriodOfStay = 0;
-        totalPeriodOfStay = (dateofDeparture.getTime() - dateofArrival.getTime());
+    private static long countWeekDaysMath(LocalDate start, LocalDate end) {
+        long count = 0;
+        final DayOfWeek weekStart = start.getDayOfWeek();
+        final DayOfWeek weekEnd = end.getDayOfWeek();
 
+        final long days = ChronoUnit.DAYS.between(start, end);
+        final long daysWithoutWeekends = days - 2 * ((days + weekStart.getValue()) / 7);
 
-        int totalDays = (int) TimeUnit.DAYS.convert(totalPeriodOfStay,TimeUnit.MILLISECONDS);
-        addHotelDetails();
-
-        for (int hotel = 0; hotel < hotelList.size(); hotel++) {
-            int totalRate = hotelList.get(hotel).getWeekDayRateRegularCustomer() * (totalDays+1);
-            hotelList.get(hotel).setWeekDayRateRegularCustomer(totalRate);
-        }
-
-        int regularHotelRate = hotelList.stream().min(Comparator.comparing(Hotel::getWeekDayRateRegularCustomer)).get().getWeekDayRateRewardCustomer();
-        String hotelName = hotelList.stream().min(Comparator.comparing(Hotel::getWeekEndRateRegularCustomer)).get().getHotelName();
-
-        System.out.println("The Cheapest Hotel is "+hotelName+" with cost for respective date as "+regularHotelRate+"$");
-        return hotelName;
-
+        // adjust for starting and ending on a Sunday:
+        count = daysWithoutWeekends + (weekStart == DayOfWeek.SUNDAY ? 1 : 0) + (weekEnd == DayOfWeek.SUNDAY ? 1 : 0);
+        return count;
     }
 
-    public Date convertStringToDate(String date) throws Exception{
-        Date date1 = null;
-        try {
-            date1 = new SimpleDateFormat("YYYYMMDD").parse(date);
+    /* Find cheapest hotel */
+    public ArrayList<String> findCheapestCost(long weekDays, long weekendDays) {
+        ArrayList<String> hotel = new ArrayList<>();
+        long minmumCostLakeWood = (hotelList.get(0).getWeekDayRateRegularCustomer()
+                + hotelList.get(0).getWeekEndRateRegularCustomer());
+        long minimumCostBridgeWood = (hotelList.get(1).getWeekDayRateRegularCustomer()
+                + hotelList.get(1).getWeekEndRateRegularCustomer());
+        long minimumCostRidgeWood = (hotelList.get(2).getWeekDayRateRegularCustomer()
+                + hotelList.get(2).getWeekEndRateRegularCustomer());
+        long minCostHotel = Math.min(minimumCostRidgeWood, Math.min(minimumCostBridgeWood, minmumCostLakeWood));
+        if (minCostHotel == minmumCostLakeWood)
+            hotel.add("LakeWood");
+        if (minCostHotel == minimumCostBridgeWood)
+            hotel.add("BridgeWood");
+        if (minCostHotel == minimumCostRidgeWood)
+            hotel.add("RidgeWood");
+        System.out.println("The minimum cost for Hotel is "+ minCostHotel);
+        return hotel;
+    }
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date1;
+    // Calculating Rate based on period of stay at hotel
+    public ArrayList<String> calculateCheapestHotelAndRate(String dateOfArrival, String dateOfDeparture) throws Exception {
+        LocalDate dateArrival = LocalDate.parse(dateOfArrival);
+        LocalDate dateDeparture = LocalDate.parse(dateOfDeparture);
+        long totalDays = ChronoUnit.DAYS.between(dateArrival, dateDeparture) + 1;
+        long weekDays = countWeekDaysMath(dateArrival, dateDeparture);
+        long weekendDays = totalDays - weekDays;
+        return findCheapestCost(weekDays, weekendDays);
+    }
+
+    @Test
+    public void givenDate_shouldReturnCheaperHotel() throws Exception {
+        Reservation hotelReservation = new Reservation();
+        hotelReservation.addHotelDetails();
+        String cheapestHotel = String.valueOf(hotelReservation.calculateCheapestHotelAndRate("16March2020", "17March2020"));
+        Assert.assertEquals("Lakewood", cheapestHotel);
     }
 }
-
 
